@@ -4,7 +4,7 @@ from tkinter import filedialog
 from hashes import Hashes
 import hashlib
 
-# TODO: Adjust window and divide into 2 frames, so long error messages don't affect the rendering
+# Adjust window and divide into 2 frames, so long error messages don't affect the rendering
 class GUI(Tk):
     def __init__(self):
         super().__init__()
