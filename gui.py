@@ -16,6 +16,7 @@ class GUI(Tk):
         self.options = []
         for algo in hashlib.algorithms_available:
             self.options.append(algo)
+            self.options.sort()
         self.upper_frame = None
         self.lower_frame = None
         self.configure_window()
@@ -58,6 +59,7 @@ class GUI(Tk):
         hash_alg_label = Label(self.upper_frame, text="Hash Algorithm:")
         hash_alg_label.grid(row=1, column=0, sticky="w", padx=10)
         self.hash_alg_list = ttk.Combobox(self.upper_frame, values=self.options, width=25)
+        self.hash_alg_list.set("Select Hash Algorithm")
         self.hash_alg_list.config(justify="center")
         self.hash_alg_list.grid(row=1, column=1, sticky="w")
 
@@ -76,6 +78,8 @@ class GUI(Tk):
     def upper_frame_row4(self):
         cmp_hash_btn = Button(self.upper_frame, text="Compare Hash Values", command=self.calculate_hash)
         cmp_hash_btn.grid(row=4, column=0, sticky="w", padx=10)
+        reset_btn = Button(self.upper_frame, text="Reset", command=self.reset)
+        reset_btn.grid(row=4, column=1, sticky="w")
 
     def lower_frame_row0(self):
         self.result_label = Label(self.lower_frame, text="", foreground="red")
@@ -90,14 +94,23 @@ class GUI(Tk):
             self.result_label.config(text="Need A Reference Hash")
             return
         selected_algorithm = self.hash_alg_list.get()
-        print(selected_algorithm)
-        try:
-            calculated_hash = self.hashes.get_file_hash(self.filepath, selected_algorithm)
-        except ValueError:
-            self.result_label.config(text="Hash or File Missing")
+        if selected_algorithm not in self.options:
+            self.result_label.config(text="Hash Algorithm missing")
             return
-        if self.ref_hash_entry.get() == calculated_hash:
-            self.result_label.config(text=f"Hashes are equal\nCalculated Hash: {calculated_hash}")
+        if not self.filepath:
+            self.result_label.config(text="File Missing")
+        calculated_hash = self.hashes.get_file_hash(self.filepath, selected_algorithm)
+        if calculated_hash is None:
+            self.result_label.config(text="File Missing")
         else:
-            self.result_label.config(text=f"Hashes are NOT equal\nCalculated Hash: {calculated_hash}")
-        print(calculated_hash)
+            if self.ref_hash_entry.get() == calculated_hash:
+                self.result_label.config(text=f"Hashes are equal\nCalculated Hash: {calculated_hash}")
+            else:
+                self.result_label.config(text=f"Hashes are NOT equal\nCalculated Hash: {calculated_hash}")
+            print(calculated_hash)
+
+    def reset(self):
+        self.ref_hash_entry.delete(0, END)
+        self.hash_alg_list.set("Select Hash Algorithm")
+        self.file_info_label.config(text="No File Selected Yet")
+        self.result_label.config(text="")
