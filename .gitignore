@@ -1,0 +1,47 @@
+# Python Bytecode files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment folders (common names)
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# PyCharm project files
+.idea/
+
+# PyInstaller-specific files
+dist/
+build/
+*.spec
+
+# .env files (for storing sensitive information like API keys)
+.env
+
+# Logs and temporary files
+*.log
+*.bak
+*.swp
+*.swo
+
+# MacOS specific
+.DS_Store
+
+# Windows specific
+Thumbs.db
+
+# Python distributions
+*.egg
+*.egg-info/
+dist/
+
+# Coverage directory from tools like coverage.py
+.coverage
+.coverage.*
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
